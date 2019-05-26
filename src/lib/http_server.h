@@ -10,4 +10,5 @@ private:
 public:
   HttpServer(/* args */);
   ~HttpServer();
+  void Listen(int port);
 };
