@@ -1,3 +1,4 @@
+#include <iostream>
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,17 +19,18 @@ void HttpServer::Listen(int port) {
     exit(EXIT_FAILURE);
   }
 
-  struct sockaddr_in address;
-  address.sin_family = AF_INET;
-  address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = port;
-  int addrlen = sizeof(address);
-
   int opt = 1;
+
   if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
     perror("setsockopt failed");
     exit(EXIT_FAILURE);
   }
+
+  struct sockaddr_in address;
+  address.sin_family = AF_INET;
+  address.sin_addr.s_addr = INADDR_ANY;
+  address.sin_port = htons(port);
+  int addrlen = sizeof(address);
 
   if (bind(sockfd, (struct sockaddr *)&address, addrlen) < 0) {
     perror("bind failed");
@@ -42,6 +44,8 @@ void HttpServer::Listen(int port) {
     exit(EXIT_FAILURE);
   }
 
+  std::cout << "accepting new connections" << std::endl;
+
   int new_socket =
       accept(sockfd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
 
@@ -50,7 +54,9 @@ void HttpServer::Listen(int port) {
     exit(EXIT_FAILURE);
   }
 
+  std::cout << "received connection" << std::endl;
+
   char buffer[1024] = {0};
   read(new_socket, buffer, 1024);
-  printf("%s\n", buffer);
+  std::cout <<  buffer;
 }
