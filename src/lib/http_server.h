@@ -3,12 +3,12 @@
 // Implement a router from scratch
 // Watch for changes and refresh the server
 
-class HttpServer
-{
-private:
-  /* data */
-public:
+class HttpServer {
+ public:
   HttpServer(/* args */);
   ~HttpServer();
   void Listen(int port);
+
+ private:
+  void ConnectionHandler(int socket);
 };

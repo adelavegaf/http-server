@@ -1,11 +1,12 @@
-#include <iostream>
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <iostream>
 
 #include "http_server.h"
+#include "request_processor.h"
 
 HttpServer::HttpServer(/* args */) {}
 
@@ -55,8 +56,19 @@ void HttpServer::Listen(int port) {
   }
 
   std::cout << "received connection" << std::endl;
+  ConnectionHandler(new_socket);
+}
 
-  char buffer[1024] = {0};
-  read(new_socket, buffer, 1024);
-  std::cout <<  buffer;
+void HttpServer::ConnectionHandler(int socket) {
+  const int buffer_size = 1024;
+  int bytes_read;
+  char buffer[buffer_size] = {0};
+  RequestProcessor rp;
+
+  // TODO(adelavega): blocks unless socket is closed. Set a timeout?
+  while ((bytes_read = read(socket, buffer, buffer_size))) {
+    std::cout << "read " << bytes_read << " bytes" << std::endl;
+    std::cout << buffer << std::endl;
+    rp.Process(buffer, bytes_read);
+  }
 }
