@@ -1,8 +1,8 @@
-// Set up a server without using any libraries
-// The server has to serve HTML, CSS and JS content.
-// Implement a router from scratch
-// Watch for changes and refresh the server
+#ifndef HTTP_SERVER_SRC_LIB_HTTP_SERVER_H_
+#define HTTP_SERVER_SRC_LIB_HTTP_SERVER_H_
 
+// Set up a server without using any libraries
+// The server has to serve static content.
 class HttpServer {
  public:
   HttpServer(/* args */);
@@ -12,3 +12,4 @@ class HttpServer {
  private:
   void ConnectionHandler(int socket);
 };
+#endif  // HTTP_SERVER_SRC_LIB_HTTP_SERVER_H_
