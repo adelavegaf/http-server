@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "http_request.h"
 #include "request_processor.h"
 
 using std::string;
@@ -16,6 +17,7 @@ void RequestProcessor::Process(const char buffer[], int size) {
 
   if (cur_request.find("\r\n\r\n", start_pos) != string::npos) {
     std::cout << "end of header" << std::endl;
+    HttpRequest req(cur_request);
     cur_request = "";
   }
 }
