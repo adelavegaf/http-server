@@ -31,22 +31,21 @@ void RequestProcessor::Process(const char buffer[], int size) {
     return;
   }
 
-  auto body_byte_count =
-      cur_request.length() - (header_end_pos + header_end_key.length());
+  auto header_len = header_end_pos + header_end_key.length();
+  auto body_byte_count = cur_request.length() - header_len;
 
   if (body_byte_count < bytes_in_body) {
-    // We are still missing more bytes of the body.
     std::cout << "Missing bytes on body" << std::endl;
     return;
+  } else if (body_byte_count == bytes_in_body) {
+    std::cout << "Finished processing request + body" << std::endl;
+    HttpRequest req(cur_request);
+    cur_request = "";
+  } else {
+    std::cout << "Finished processing request + body + extra" << std::endl;
+    HttpRequest req(cur_request.substr(0, header_len + bytes_in_body));
+    cur_request = cur_request.substr(header_len + bytes_in_body, string::npos);
   }
-
-  std::cout << "Finished processing request + body" << std::endl;
-  HttpRequest req(cur_request);
-  cur_request = "";
-
-  // TODO(adelavega): determine what to do with possible left over bytes that
-  // dont belong to this request but the next one: body_byte_count >
-  // bytes_in_body
 }
 
 int RequestProcessor::GetContentLength(string request) {
