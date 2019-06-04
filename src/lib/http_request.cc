@@ -62,3 +62,5 @@ map<string, string> HttpRequest::GetOptionalHeaders(vector<string> lines) {
 }
 
 HttpRequest::~HttpRequest() {}
+
+Method HttpRequest::GetMethod() { return status_line.method; }

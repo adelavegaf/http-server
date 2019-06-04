@@ -30,3 +30,14 @@ cc_library(
   name = "http_method",
   hdrs = ["http_method.h"]
 )
+
+cc_test(
+    name = "test",
+    srcs = ["request_processor_test.cc"],
+    deps = [
+        ":request_processor",
+        ":http_request",
+        ":http_method",
+        "@gtest//:gtest",
+    ],
+)

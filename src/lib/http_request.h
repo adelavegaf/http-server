@@ -17,16 +17,16 @@ struct StatusLine {
 
 class HttpRequest {
  private:
-  // Header attributes
   StatusLine status_line;
   map<string, string> optional_headers;
-  string body;
   StatusLine GetStatusLine(string s);
   map<string, string> GetOptionalHeaders(vector<string> lines);
   Method StringToHttpMethod(string m);
+  string body;
 
  public:
   HttpRequest(string r);
   ~HttpRequest();
+  Method GetMethod();
 };
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_REQUEST_H_
