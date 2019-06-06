@@ -15,8 +15,9 @@ HttpRequest::HttpRequest(string r) {
   string delimiter = "\r\n";
   while (true) {
     size_t pos = r.find(delimiter, start_pos);
-    if (pos == string::npos || start_pos + delimiter.length() == pos) {
-      // Two consecutive \r\n mark the end of the header.
+    if (pos == string::npos || start_pos == pos) {
+      // start_pos and pos will only be the equal when start_pos is pointing
+      // to the last \r\n.
       break;
     }
     lines.push_back(r.substr(start_pos, pos - start_pos));
@@ -27,9 +28,9 @@ HttpRequest::HttpRequest(string r) {
     return;
   }
 
-  body = r.length() > start_pos + delimiter.length()
-             ? r.substr(start_pos + delimiter.length(), string::npos)
-             : "";
+  // Move start_pos to end of header
+  start_pos += delimiter.length();
+  body = r.length() > start_pos ? r.substr(start_pos, string::npos) : "";
 
   status_line = GetStatusLine(lines[0]);
   optional_headers = GetOptionalHeaders(lines);
@@ -64,3 +65,5 @@ map<string, string> HttpRequest::GetOptionalHeaders(vector<string> lines) {
 HttpRequest::~HttpRequest() {}
 
 Method HttpRequest::GetMethod() { return status_line.method; }
+
+string HttpRequest::GetBody() { return body; }

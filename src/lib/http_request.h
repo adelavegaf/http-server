@@ -28,5 +28,6 @@ class HttpRequest {
   HttpRequest(string r);
   ~HttpRequest();
   Method GetMethod();
+  string GetBody();
 };
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_REQUEST_H_
