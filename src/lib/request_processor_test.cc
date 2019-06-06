@@ -31,7 +31,7 @@ string getRequest(string method, string body) {
   return request;
 }
 
-TEST(RequestProcessorTest, ParsesGetRequestCorrectly) {
+TEST(RequestProcessorTest, ParsesGetRequest) {
   string request = getRequest("GET", "");
   char buffer[request.length()];
   for (int i = 0; i < request.length(); i++) {
@@ -44,7 +44,7 @@ TEST(RequestProcessorTest, ParsesGetRequestCorrectly) {
   ASSERT_EQ(req->GetBody(), "");
 }
 
-TEST(RequestProcessorTest, ParsesPostRequestCorrectly) {
+TEST(RequestProcessorTest, ParsesPostRequest) {
   string body = "body";
   string request = getRequest("POST", body);
   char buffer[request.length()];
@@ -56,6 +56,38 @@ TEST(RequestProcessorTest, ParsesPostRequestCorrectly) {
   ASSERT_TRUE(req) << "A request should have been returned";
   ASSERT_EQ(req->GetMethod(), Method::POST);
   ASSERT_EQ(req->GetBody(), body);
+}
+
+TEST(RequestProcessorTest, ParsesMangledRequests) {
+  string body1 = "";
+  string req1 = getRequest("GET", body1);
+  string body2 = "test body";
+  string req2 = getRequest("POST", body2);
+  char buffer[req1.length() + req2.length()];
+  int buffer_index = 0;
+  for (int i = 0; i < req1.length(); i++) {
+    buffer[buffer_index++] = req1[i];
+  }
+  int missing_bytes = 100;
+  for (int i = 0; i < req2.length() - missing_bytes; i++) {
+    buffer[buffer_index++] = req2[i];
+  }
+  RequestProcessor rp;
+  std::optional<HttpRequest> req;
+  
+  req = rp.Process(buffer, buffer_index);
+  ASSERT_TRUE(req) << "A request should have been returned";
+  ASSERT_EQ(req->GetMethod(), Method::GET);
+  ASSERT_EQ(req->GetBody(), body1);
+
+  for (int i = 0; i < missing_bytes; i++) {
+    buffer[i] = req2[req2.length() - missing_bytes + i];
+  }
+
+  req = rp.Process(buffer, buffer_index);
+  ASSERT_TRUE(req) << "A request should have been returned";
+  ASSERT_EQ(req->GetMethod(), Method::POST);
+  ASSERT_EQ(req->GetBody(), body2);
 }
 
 int main(int argc, char **argv) {

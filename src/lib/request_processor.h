@@ -3,21 +3,20 @@
 
 #include <optional>
 #include <string>
-#include <vector>
 
 #include "http_request.h"
 
+using std::optional;
 using std::string;
-using std::vector;
 
 class RequestProcessor {
  public:
-  std::optional<HttpRequest> Process(const char buffer[], int size);
+  optional<HttpRequest> Process(const char buffer[], int size);
   StatusLine GetStatusLine();
 
  private:
   string cur_request;
-  int GetContentLength(string request);
+  optional<unsigned long> GetContentLength(string header);
 };
 
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_REQUEST_PROCESSOR_H_
