@@ -23,7 +23,7 @@ optional<HttpRequest> RequestProcessor::Process(const char buffer[], int size) {
   auto header_end_pos = cur_request.find(header_end_key);
 
   if (header_end_pos == string::npos) {
-    // We havent reached the end of the header -> keep on processing more bytes
+    // We have not reached the end of the header marked by two consecutive \r\n.
     return std::nullopt;
   }
 
@@ -35,7 +35,7 @@ optional<HttpRequest> RequestProcessor::Process(const char buffer[], int size) {
   auto bytes_in_body = GetContentLength(header);
 
   if (body_byte_count < bytes_in_body) {
-    std::cout << "Missing bytes in body" << std::endl;
+    // We are missing some bytes from the request's body.
     return std::nullopt;
   }
 

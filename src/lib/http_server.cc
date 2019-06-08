@@ -4,13 +4,19 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <iostream>
+#include <map>
 
+#include "http_request.h"
 #include "http_server.h"
 #include "request_processor.h"
 
-HttpServer::HttpServer(/* args */) {}
+HttpServer::HttpServer() {}
 
 HttpServer::~HttpServer() {}
+
+void HttpServer::Handle(string path, HandlerFn handler) {
+  handlers[path] = handler;
+}
 
 void HttpServer::Listen(int port) {
   int sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -69,6 +75,14 @@ void HttpServer::ConnectionHandler(int socket) {
   while ((bytes_read = read(socket, buffer, buffer_size))) {
     std::cout << "read " << bytes_read << " bytes" << std::endl;
     std::cout << buffer << std::endl;
-    rp.Process(buffer, bytes_read);
+    auto req = rp.Process(buffer, bytes_read);
+    if (!req) {
+      continue;
+    }
+
+    string path = req->header.target;
+    if (handlers.count(path) == 0) {
+      std::cout << "No registered handlers for path: " << path << std::endl;
+    }
   }
 }
