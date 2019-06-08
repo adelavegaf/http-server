@@ -19,7 +19,6 @@ cc_library(
 
 cc_library(
   name = "http_request",
-  srcs = ["http_request.cc"],
   hdrs = ["http_request.h"],
   deps = [
     ":http_method"

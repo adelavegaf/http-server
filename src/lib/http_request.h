@@ -9,25 +9,16 @@ using std::map;
 using std::string;
 using std::vector;
 
-struct StatusLine {
+struct HttpHeader {
   Method method;
-  string uri;
+  string target;
   string version;
+  map<string, string> optional;
 };
 
-class HttpRequest {
- private:
-  StatusLine status_line;
-  map<string, string> optional_headers;
-  StatusLine GetStatusLine(string s);
-  map<string, string> GetOptionalHeaders(vector<string> lines);
-  Method StringToHttpMethod(string m);
+struct HttpRequest {
+  HttpHeader header;
   string body;
-
- public:
-  HttpRequest(string r);
-  ~HttpRequest();
-  Method GetMethod();
-  string GetBody();
 };
+
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_REQUEST_H_
