@@ -63,13 +63,16 @@ TEST(RequestProcessorTest, ParsesMangledRequests) {
   string req1 = getRequest("GET", body1);
   string body2 = "test body";
   string req2 = getRequest("POST", body2);
+  string body3 = "body test";
+  string req3 = getRequest("POST", body3);
+
   char buffer[req1.length() + req2.length()];
   int buffer_index = 0;
   for (int i = 0; i < req1.length(); i++) {
     buffer[buffer_index++] = req1[i];
   }
-  int missing_bytes = 100;
-  for (int i = 0; i < req2.length() - missing_bytes; i++) {
+  int req2_missing_bytes = 100;
+  for (int i = 0; i < req2.length() - req2_missing_bytes; i++) {
     buffer[buffer_index++] = req2[i];
   }
   RequestProcessor rp;
@@ -80,14 +83,31 @@ TEST(RequestProcessorTest, ParsesMangledRequests) {
   ASSERT_EQ(req->header.method, Method::GET);
   ASSERT_EQ(req->body, body1);
 
-  for (int i = 0; i < missing_bytes; i++) {
-    buffer[i] = req2[req2.length() - missing_bytes + i];
+  buffer_index = 0;
+
+  for (int i = 0; i < req2_missing_bytes; i++) {
+    buffer[buffer_index++] = req2[req2.length() - req2_missing_bytes + i];
+  }
+  int req3_missing_bytes = 33;
+  for (int i = 0; i < req3.length() - req3_missing_bytes; i++) {
+    buffer[buffer_index++] = req3[i];
   }
 
   req = rp.Process(buffer, buffer_index);
   ASSERT_TRUE(req) << "A request should have been returned";
   ASSERT_EQ(req->header.method, Method::POST);
   ASSERT_EQ(req->body, body2);
+
+  buffer_index = 0;
+
+  for (int i = 0; i < req3_missing_bytes; i++) {
+    buffer[buffer_index++] = req3[req3.length() - req3_missing_bytes + i];
+  }
+
+  req = rp.Process(buffer, buffer_index);
+  ASSERT_TRUE(req) << "A request should have been returned";
+  ASSERT_EQ(req->header.method, Method::POST);
+  ASSERT_EQ(req->body, body3);
 }
 
 int main(int argc, char **argv) {
