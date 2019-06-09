@@ -7,6 +7,7 @@ cc_library(
     ":request_processor",
     ":request",
     ":response",
+    ":response_builder",
   ]
 )
 
@@ -37,13 +38,21 @@ cc_library(
 )
 
 cc_library(
+  name = "response_builder",
+  srcs = ["response_builder.cc"],
+  hdrs = ["response_builder.h"],
+  visibility = ["//visibility:public"],
+  deps = [":response"],
+)
+
+cc_library(
   name = "method",
   srcs = ["method.cc"],
   hdrs = ["method.h"]
 )
 
 cc_test(
-    name = "test",
+    name = "request_processor_test",
     srcs = ["request_processor_test.cc"],
     deps = [
         ":request_processor",

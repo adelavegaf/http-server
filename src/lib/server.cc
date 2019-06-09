@@ -9,6 +9,7 @@
 #include "request.h"
 #include "request_processor.h"
 #include "response.h"
+#include "response_builder.h"
 #include "server.h"
 
 namespace http {
@@ -96,6 +97,9 @@ void Server::ConnectionHandler(int socket) {
     }
     const char *response = r.ToString().c_str();
 
+    std::cout << "Sending response" << std::endl << std::endl;
+    std::cout << response << std::endl << std::endl;
+
     if (send(socket, response, strlen(response), 0) == -1) {
       std::cout << "Failed to send response" << std::endl;
       perror("send failed");
@@ -106,20 +110,11 @@ void Server::ConnectionHandler(int socket) {
 }
 
 Response Server::GetDefaultErrorResponse() {
-  Response r;
-
-  r.status_code = 404;
-  r.status_text = "Not found";
-  r.protocol = "HTTP/1.1";
-  r.body = "not found!";
-
-  std::map<std::string, std::string> headers;
-  headers["Connection"] = "Closed";
-  headers["Content-Type"] = "text/html";
-  headers["Content-Length"] = std::to_string(r.body.length());
-  r.headers = headers;
-
-  return r;
+  return ResponseBuilder{}
+      .SetStatus(404, "Not found")
+      .SetConnection("Closed")
+      .SetBody("Not found", "text/html")
+      .Build();
 }
 
 }  // namespace http
