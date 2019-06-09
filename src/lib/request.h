@@ -1,10 +1,10 @@
-#ifndef HTTP_SERVER_SRC_LIB_HTTP_REQUEST_H_
-#define HTTP_SERVER_SRC_LIB_HTTP_REQUEST_H_
+#ifndef HTTP_SERVER_SRC_LIB_REQUEST_H_
+#define HTTP_SERVER_SRC_LIB_REQUEST_H_
 
 #include <map>
 #include <string>
 
-#include "http_method.h"
+#include "method.h"
 
 namespace http {
 
@@ -14,7 +14,7 @@ struct RequestStatusLine {
   std::string protocol;
 };
 
-struct HttpRequest {
+struct Request {
   Method method;
   std::string url;
   std::string protocol;
@@ -25,4 +25,4 @@ struct HttpRequest {
 
 }  // namespace http
 
-#endif  // HTTP_SERVER_SRC_LIB_HTTP_REQUEST_H_
+#endif  // HTTP_SERVER_SRC_LIB_REQUEST_H_

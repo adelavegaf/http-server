@@ -1,6 +1,6 @@
-#include "lib/http_server.h"
+#include "lib/server.h"
 
 int main() {
-  http::HttpServer server;
+  http::Server server;
   server.Listen(8080);
 }

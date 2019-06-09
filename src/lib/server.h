@@ -1,20 +1,20 @@
-#ifndef HTTP_SERVER_SRC_LIB_HTTP_SERVER_H_
-#define HTTP_SERVER_SRC_LIB_HTTP_SERVER_H_
+#ifndef HTTP_SERVER_SRC_LIB_SERVER_H_
+#define HTTP_SERVER_SRC_LIB_SERVER_H_
 
 #include <map>
 
-#include "http_request.h"
+#include "request.h"
 
 namespace http {
 
-typedef void (*HandlerFn)(HttpRequest req);
+typedef void (*HandlerFn)(Request req);
 
 // Set up a server without using any libraries
 // The server has to serve static content.
-class HttpServer {
+class Server {
  public:
-  HttpServer();
-  ~HttpServer();
+  Server();
+  ~Server();
   void Listen(int port);
   void Handle(std::string path, HandlerFn handler);
 
@@ -25,4 +25,4 @@ class HttpServer {
 
 }  // namespace http
 
-#endif  // HTTP_SERVER_SRC_LIB_HTTP_SERVER_H_
+#endif  // HTTP_SERVER_SRC_LIB_SERVER_H_

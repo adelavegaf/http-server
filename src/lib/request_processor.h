@@ -4,19 +4,19 @@
 #include <optional>
 #include <string>
 
-#include "http_request.h"
+#include "request.h"
 
 namespace http {
 
 class RequestProcessor {
  public:
   RequestProcessor();
-  std::optional<HttpRequest> Process(const char buffer[], int size);
+  std::optional<Request> Process(const char buffer[], int size);
 
  private:
   std::string cur_request;
   unsigned long GetContentLength(const std::string header);
-  HttpRequest ParseRequest(const std::string header, const std::string body);
+  Request ParseRequest(const std::string header, const std::string body);
   RequestStatusLine ParseStatusLine(const std::string s);
   std::map<std::string, std::string> ParseHeaders(
       const std::vector<std::string> lines);

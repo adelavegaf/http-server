@@ -1,7 +1,7 @@
 cc_library(
-  name = "http_server",
-  srcs = ["http_server.cc"],
-  hdrs = ["http_server.h"],
+  name = "server",
+  srcs = ["server.cc"],
+  hdrs = ["server.h"],
   visibility = ["//visibility:public"],
   deps = [
     ":request_processor",
@@ -13,29 +13,29 @@ cc_library(
   srcs = ["request_processor.cc"],
   hdrs = ["request_processor.h"],
   deps = [
-    ":http_request"
+    ":request"
   ]
 )
 
 cc_library(
-  name = "http_request",
-  srcs = ["http_request.cc"],
-  hdrs = ["http_request.h"],
+  name = "request",
+  srcs = ["request.cc"],
+  hdrs = ["request.h"],
   deps = [
-    ":http_method"
+    ":method"
   ]
 )
 
 cc_library(
-  name = "http_response",
-  srcs = ["http_response.cc"],
-  hdrs = ["http_response.h"]
+  name = "response",
+  srcs = ["response.cc"],
+  hdrs = ["response.h"]
 )
 
 cc_library(
-  name = "http_method",
-  srcs = ["http_method.cc"],
-  hdrs = ["http_method.h"]
+  name = "method",
+  srcs = ["method.cc"],
+  hdrs = ["method.h"]
 )
 
 cc_test(
@@ -43,8 +43,8 @@ cc_test(
     srcs = ["request_processor_test.cc"],
     deps = [
         ":request_processor",
-        ":http_request",
-        ":http_method",
+        ":request",
+        ":method",
         "@gtest//:gtest",
     ],
 )

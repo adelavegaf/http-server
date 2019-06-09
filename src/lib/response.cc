@@ -1,10 +1,10 @@
 #include <string>
 
-#include "http_response.h"
+#include "response.h"
 
 namespace http {
 
-std::string HttpResponse::ToString() {
+std::string Response::ToString() {
   std::string output =
       protocol + " " + std::to_string(status_code) + " " + status_text + "\r\n";
 

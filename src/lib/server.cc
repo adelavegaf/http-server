@@ -6,21 +6,21 @@
 #include <iostream>
 #include <map>
 
-#include "http_request.h"
-#include "http_server.h"
+#include "request.h"
 #include "request_processor.h"
+#include "server.h"
 
 namespace http {
 
-HttpServer::HttpServer() {}
+Server::Server() {}
 
-HttpServer::~HttpServer() {}
+Server::~Server() {}
 
-void HttpServer::Handle(std::string path, HandlerFn handler) {
+void Server::Handle(std::string path, HandlerFn handler) {
   handlers[path] = handler;
 }
 
-void HttpServer::Listen(int port) {
+void Server::Listen(int port) {
   int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
   if (sockfd == 0) {
@@ -67,7 +67,7 @@ void HttpServer::Listen(int port) {
   ConnectionHandler(new_socket);
 }
 
-void HttpServer::ConnectionHandler(int socket) {
+void Server::ConnectionHandler(int socket) {
   const int buffer_size = 1024;
   int bytes_read;
   char buffer[buffer_size] = {0};

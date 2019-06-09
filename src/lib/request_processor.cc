@@ -5,15 +5,15 @@
 #include <string>
 #include <vector>
 
-#include "http_request.h"
+#include "request.h"
 #include "request_processor.h"
 
 namespace http {
 
 RequestProcessor::RequestProcessor() { cur_request = ""; }
 
-std::optional<HttpRequest> RequestProcessor::Process(const char buffer[],
-                                                     const int size) {
+std::optional<Request> RequestProcessor::Process(const char buffer[],
+                                                 const int size) {
   for (int i = 0; i < size; i++) {
     cur_request += buffer[i];
   }
@@ -42,7 +42,7 @@ std::optional<HttpRequest> RequestProcessor::Process(const char buffer[],
   cur_request =
       cur_request.substr(header.length() + bytes_in_body, std::string::npos);
 
-  HttpRequest req = ParseRequest(header, body);
+  Request req = ParseRequest(header, body);
   return {req};
 }
 
@@ -59,8 +59,8 @@ unsigned long RequestProcessor::GetContentLength(const std::string header) {
   return std::stoul(content_length_str);
 }
 
-HttpRequest RequestProcessor::ParseRequest(const std::string header,
-                                           const std::string body) {
+Request RequestProcessor::ParseRequest(const std::string header,
+                                       const std::string body) {
   size_t start_pos = 0;
   std::vector<std::string> lines;
   std::string delimiter = "\r\n";
@@ -86,7 +86,7 @@ RequestStatusLine RequestProcessor::ParseStatusLine(const std::string s) {
   size_t start_pos = 0;
   size_t next_pos = s.find(" ", start_pos);
   std::string m = s.substr(start_pos, next_pos);
-  Method method = StringToHttpMethod(m);
+  Method method = StringToMethod(m);
 
   start_pos = next_pos + 1;
   next_pos = s.find(" ", start_pos);

@@ -1,9 +1,9 @@
-#ifndef HTTP_SERVER_SRC_LIB_HTTP_RESPONSE_H_
-#define HTTP_SERVER_SRC_LIB_HTTP_RESPONSE_H_
+#ifndef HTTP_SERVER_SRC_LIB_RESPONSE_H_
+#define HTTP_SERVER_SRC_LIB_RESPONSE_H_
 
 #include <map>
 #include <string>
-#include "http_method.h"
+#include "method.h"
 
 namespace http {
 
@@ -13,7 +13,7 @@ struct ResponseStatusLine {
   std::string status_text;
 };
 
-struct HttpResponse {
+struct Response {
   std::string protocol;
   int status_code;
   std::string status_text;
@@ -24,4 +24,4 @@ struct HttpResponse {
 
 }  // namespace http
 
-#endif  // HTTP_SERVER_SRC_LIB_HTTP_RESPONSE_H_
+#endif  // HTTP_SERVER_SRC_LIB_RESPONSE_H_

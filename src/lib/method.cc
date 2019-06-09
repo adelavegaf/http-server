@@ -1,10 +1,10 @@
 #include <string>
 
-#include "http_method.h"
+#include "method.h"
 
 namespace http {
 
-Method StringToHttpMethod(std::string m) {
+Method StringToMethod(std::string m) {
   std::transform(m.begin(), m.end(), m.begin(),
                  [](unsigned char c) { return std::toupper(c); });
   if (m == "GET") {
@@ -28,7 +28,7 @@ Method StringToHttpMethod(std::string m) {
   }
 }
 
-std::string HttpMethodToString(Method m) {
+std::string MethodToString(Method m) {
   if (m == Method::GET) {
     return "GET";
   } else if (m == Method::POST) {

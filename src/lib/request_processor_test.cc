@@ -3,8 +3,8 @@
 #include <string>
 #include "gtest/gtest.h"
 
-#include "http_method.h"
-#include "http_request.h"
+#include "method.h"
+#include "request.h"
 #include "request_processor.h"
 
 std::string getRequest(std::string method, std::string body) {
@@ -38,7 +38,7 @@ TEST(RequestProcessorTest, ParsesGetRequest) {
     buffer[i] = request[i];
   }
   http::RequestProcessor rp;
-  std::optional<http::HttpRequest> req = rp.Process(buffer, request.length());
+  std::optional<http::Request> req = rp.Process(buffer, request.length());
   ASSERT_TRUE(req) << "A request should have been returned";
   ASSERT_EQ(req->method, http::Method::GET);
   ASSERT_EQ(req->body, "");
@@ -52,7 +52,7 @@ TEST(RequestProcessorTest, ParsesPostRequest) {
     buffer[i] = request[i];
   }
   http::RequestProcessor rp;
-  std::optional<http::HttpRequest> req = rp.Process(buffer, request.length());
+  std::optional<http::Request> req = rp.Process(buffer, request.length());
   ASSERT_TRUE(req) << "A request should have been returned";
   ASSERT_EQ(req->method, http::Method::POST);
   ASSERT_EQ(req->body, body);
@@ -76,7 +76,7 @@ TEST(RequestProcessorTest, ParsesMangledRequests) {
     buffer[buffer_index++] = req2[i];
   }
   http::RequestProcessor rp;
-  std::optional<http::HttpRequest> req;
+  std::optional<http::Request> req;
 
   req = rp.Process(buffer, buffer_index);
   ASSERT_TRUE(req) << "A request should have been returned";
