@@ -5,6 +5,8 @@ cc_library(
   visibility = ["//visibility:public"],
   deps = [
     ":request_processor",
+    ":request",
+    ":response",
   ]
 )
 
@@ -21,6 +23,7 @@ cc_library(
   name = "request",
   srcs = ["request.cc"],
   hdrs = ["request.h"],
+  visibility = ["//visibility:public"],
   deps = [
     ":method"
   ]
@@ -29,7 +32,8 @@ cc_library(
 cc_library(
   name = "response",
   srcs = ["response.cc"],
-  hdrs = ["response.h"]
+  hdrs = ["response.h"],
+  visibility = ["//visibility:public"],
 )
 
 cc_library(

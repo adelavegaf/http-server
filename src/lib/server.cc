@@ -8,6 +8,7 @@
 
 #include "request.h"
 #include "request_processor.h"
+#include "response.h"
 #include "server.h"
 
 namespace http {
@@ -17,6 +18,7 @@ Server::Server() {}
 Server::~Server() {}
 
 void Server::Handle(std::string path, HandlerFn handler) {
+  std::cout << "Registering handler for path " << path << std::endl;
   handlers[path] = handler;
 }
 
@@ -74,7 +76,7 @@ void Server::ConnectionHandler(int socket) {
   RequestProcessor rp;
 
   // TODO(adelavega): blocks unless socket is closed. Set a timeout?
-  while ((bytes_read = read(socket, buffer, buffer_size))) {
+  while ((bytes_read = read(socket, buffer, buffer_size)) > 0) {
     std::cout << "read " << bytes_read << " bytes" << std::endl;
     std::cout << buffer << std::endl;
     auto req = rp.Process(buffer, bytes_read);
@@ -83,10 +85,41 @@ void Server::ConnectionHandler(int socket) {
     }
 
     std::string path = req->url;
+    Response r;
+
     if (handlers.count(path) == 0) {
       std::cout << "No registered handlers for path: " << path << std::endl;
+      r = GetDefaultErrorResponse();
+    } else {
+      std::cout << "Handler for path found: " << path << std::endl;
+      r = handlers[path](*req);
+    }
+    const char *response = r.ToString().c_str();
+
+    if (send(socket, response, strlen(response), 0) == -1) {
+      std::cout << "Failed to send response" << std::endl;
+      perror("send failed");
+      close(socket);
+      break;
     }
   }
+}
+
+Response Server::GetDefaultErrorResponse() {
+  Response r;
+
+  r.status_code = 404;
+  r.status_text = "Not found";
+  r.protocol = "HTTP/1.1";
+  r.body = "not found!";
+
+  std::map<std::string, std::string> headers;
+  headers["Connection"] = "Closed";
+  headers["Content-Type"] = "text/html";
+  headers["Content-Length"] = std::to_string(r.body.length());
+  r.headers = headers;
+
+  return r;
 }
 
 }  // namespace http

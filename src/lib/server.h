@@ -4,10 +4,11 @@
 #include <map>
 
 #include "request.h"
+#include "response.h"
 
 namespace http {
 
-typedef void (*HandlerFn)(Request req);
+typedef Response (*HandlerFn)(Request req);
 
 // Set up a server without using any libraries
 // The server has to serve static content.
@@ -21,6 +22,7 @@ class Server {
  private:
   std::map<std::string, HandlerFn> handlers;
   void ConnectionHandler(int socket);
+  Response GetDefaultErrorResponse();
 };
 
 }  // namespace http

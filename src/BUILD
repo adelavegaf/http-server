@@ -3,5 +3,7 @@ cc_binary(
   srcs = ["main.cc"],
   deps = [
     "//src/lib:server",
+    "//src/lib:request",
+    "//src/lib:response",
   ]
 )
