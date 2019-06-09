@@ -9,16 +9,19 @@ using std::map;
 using std::string;
 using std::vector;
 
-struct HttpHeader {
+struct RequestStatusLine {
   Method method;
-  string target;
-  string version;
-  map<string, string> optional;
+  string url;
+  string protocol;
 };
 
 struct HttpRequest {
-  HttpHeader header;
+  Method method;
+  string url;
+  string protocol;
+  map<string, string> headers;
   string body;
+  string ToString();
 };
 
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_REQUEST_H_

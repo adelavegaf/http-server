@@ -19,6 +19,7 @@ cc_library(
 
 cc_library(
   name = "http_request",
+  srcs = ["http_request.cc"],
   hdrs = ["http_request.h"],
   deps = [
     ":http_method"
@@ -26,7 +27,14 @@ cc_library(
 )
 
 cc_library(
+  name = "http_response",
+  srcs = ["http_response.cc"],
+  hdrs = ["http_response.h"]
+)
+
+cc_library(
   name = "http_method",
+  srcs = ["http_method.cc"],
   hdrs = ["http_method.h"]
 )
 

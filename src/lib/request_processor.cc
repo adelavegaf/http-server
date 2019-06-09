@@ -14,7 +14,8 @@ using std::string;
 
 RequestProcessor::RequestProcessor() { cur_request = ""; }
 
-optional<HttpRequest> RequestProcessor::Process(const char buffer[], int size) {
+optional<HttpRequest> RequestProcessor::Process(const char buffer[],
+                                                const int size) {
   for (int i = 0; i < size; i++) {
     cur_request += buffer[i];
   }
@@ -47,7 +48,7 @@ optional<HttpRequest> RequestProcessor::Process(const char buffer[], int size) {
   return {req};
 }
 
-unsigned long RequestProcessor::GetContentLength(string header) {
+unsigned long RequestProcessor::GetContentLength(const string header) {
   string key = "Content-Length: ";
   auto key_pos = header.find(key);
   if (key_pos == string::npos) {
@@ -59,56 +60,51 @@ unsigned long RequestProcessor::GetContentLength(string header) {
   return std::stoul(content_length_str);
 }
 
-HttpRequest RequestProcessor::ParseRequest(string header_str, string body_str) {
-  auto header = ParseHeader(header_str);
-  return {header, body_str};
-}
-
-HttpHeader RequestProcessor::ParseHeader(string header) {
+HttpRequest RequestProcessor::ParseRequest(const string header,
+                                           const string body) {
   size_t start_pos = 0;
   vector<string> lines;
   string delimiter = "\r\n";
+
   while (true) {
     size_t pos = header.find(delimiter, start_pos);
     if (pos == string::npos || start_pos == pos) {
-      // start_pos and pos will only be the equal when start_pos is pointing
-      // to the last \r\n.
+      // start_pos and pos will only be equal when start_pos is pointing to the
+      // last \r\n.
       break;
     }
     lines.push_back(header.substr(start_pos, pos - start_pos));
     start_pos = pos + delimiter.length();
   }
 
-  auto status_line = ParseStatusLine(lines[0]);
-  auto optional_headers = ParseOptionalHeaders(lines);
+  auto sl = ParseStatusLine(lines[0]);
+  auto headers = ParseHeaders(lines);
 
-  return {status_line.method, status_line.target, status_line.version,
-          optional_headers};
+  return {sl.method, sl.url, sl.protocol, headers, body};
 }
 
-StatusLine RequestProcessor::ParseStatusLine(string s) {
+RequestStatusLine RequestProcessor::ParseStatusLine(const string s) {
   size_t start_pos = 0;
   size_t next_pos = s.find(" ", start_pos);
   string m = s.substr(start_pos, next_pos);
-  Method method = stringToHttpMethod(m);
+  Method method = StringToHttpMethod(m);
 
   start_pos = next_pos + 1;
   next_pos = s.find(" ", start_pos);
-  string uri = s.substr(start_pos, next_pos - start_pos);
+  string url = s.substr(start_pos, next_pos - start_pos);
 
-  string version = s.substr(next_pos + 1, string::npos);
+  string protocol = s.substr(next_pos + 1, string::npos);
 
-  return {method, uri, version};
+  return {method, url, protocol};
 }
 
-map<string, string> RequestProcessor::ParseOptionalHeaders(
-    vector<string> lines) {
-  map<string, string> opt_headers;
+map<string, string> RequestProcessor::ParseHeaders(const vector<string> lines) {
+  map<string, string> headers;
   for (int i = 1; i < lines.size() - 1; i++) {
     int separator = lines[i].find(": ");
     string key = lines[i].substr(0, separator);
     string value = lines[i].substr(separator + 2, string::npos);
-    opt_headers[key] = value;
+    headers[key] = value;
   }
-  return opt_headers;
+  return headers;
 }

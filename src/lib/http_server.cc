@@ -80,7 +80,7 @@ void HttpServer::ConnectionHandler(int socket) {
       continue;
     }
 
-    string path = req->header.target;
+    string path = req->url;
     if (handlers.count(path) == 0) {
       std::cout << "No registered handlers for path: " << path << std::endl;
     }
