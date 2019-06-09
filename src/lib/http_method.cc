@@ -2,6 +2,8 @@
 
 #include "http_method.h"
 
+namespace http_method {
+
 Method StringToHttpMethod(std::string m) {
   std::transform(m.begin(), m.end(), m.begin(),
                  [](unsigned char c) { return std::toupper(c); });
@@ -26,7 +28,7 @@ Method StringToHttpMethod(std::string m) {
   }
 }
 
-string HttpMethodToString(Method m) {
+std::string HttpMethodToString(Method m) {
   if (m == Method::GET) {
     return "GET";
   } else if (m == Method::POST) {
@@ -47,3 +49,4 @@ string HttpMethodToString(Method m) {
     return "";
   }
 }
+}  // namespace http_method

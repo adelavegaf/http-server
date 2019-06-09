@@ -8,6 +8,8 @@
 #include "http_request.h"
 #include "request_processor.h"
 
+using http_method::Method;
+using http_method::StringToHttpMethod;
 using std::map;
 using std::optional;
 using std::string;

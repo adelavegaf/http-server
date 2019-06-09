@@ -3,7 +3,7 @@
 
 #include <string>
 
-using std::string;
+namespace http_method {
 
 enum class Method {
   OPTIONS,
@@ -17,7 +17,8 @@ enum class Method {
   UNKNOWN
 };
 
-Method StringToHttpMethod(string m);
-string HttpMethodToString(Method m);
+Method StringToHttpMethod(std::string m);
+std::string HttpMethodToString(Method m);
 
+}  // namespace http_method
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_METHOD_H_

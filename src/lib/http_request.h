@@ -10,13 +10,13 @@ using std::string;
 using std::vector;
 
 struct RequestStatusLine {
-  Method method;
+  http_method::Method method;
   string url;
   string protocol;
 };
 
 struct HttpRequest {
-  Method method;
+  http_method::Method method;
   string url;
   string protocol;
   map<string, string> headers;

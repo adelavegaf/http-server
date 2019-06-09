@@ -40,7 +40,7 @@ TEST(RequestProcessorTest, ParsesGetRequest) {
   RequestProcessor rp;
   std::optional<HttpRequest> req = rp.Process(buffer, request.length());
   ASSERT_TRUE(req) << "A request should have been returned";
-  ASSERT_EQ(req->method, Method::GET);
+  ASSERT_EQ(req->method, http_method::Method::GET);
   ASSERT_EQ(req->body, "");
 }
 
@@ -54,7 +54,7 @@ TEST(RequestProcessorTest, ParsesPostRequest) {
   RequestProcessor rp;
   std::optional<HttpRequest> req = rp.Process(buffer, request.length());
   ASSERT_TRUE(req) << "A request should have been returned";
-  ASSERT_EQ(req->method, Method::POST);
+  ASSERT_EQ(req->method, http_method::Method::POST);
   ASSERT_EQ(req->body, body);
 }
 
@@ -80,7 +80,7 @@ TEST(RequestProcessorTest, ParsesMangledRequests) {
 
   req = rp.Process(buffer, buffer_index);
   ASSERT_TRUE(req) << "A request should have been returned";
-  ASSERT_EQ(req->method, Method::GET);
+  ASSERT_EQ(req->method, http_method::Method::GET);
   ASSERT_EQ(req->body, body1);
 
   buffer_index = 0;
@@ -95,7 +95,7 @@ TEST(RequestProcessorTest, ParsesMangledRequests) {
 
   req = rp.Process(buffer, buffer_index);
   ASSERT_TRUE(req) << "A request should have been returned";
-  ASSERT_EQ(req->method, Method::POST);
+  ASSERT_EQ(req->method, http_method::Method::POST);
   ASSERT_EQ(req->body, body2);
 
   buffer_index = 0;
@@ -106,7 +106,7 @@ TEST(RequestProcessorTest, ParsesMangledRequests) {
 
   req = rp.Process(buffer, buffer_index);
   ASSERT_TRUE(req) << "A request should have been returned";
-  ASSERT_EQ(req->method, Method::POST);
+  ASSERT_EQ(req->method, http_method::Method::POST);
   ASSERT_EQ(req->body, body3);
 }
 
