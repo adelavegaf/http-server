@@ -3,25 +3,26 @@
 
 #include <map>
 #include <string>
+
 #include "http_method.h"
 
-using std::map;
-using std::string;
-using std::vector;
+namespace http {
 
 struct RequestStatusLine {
-  http_method::Method method;
-  string url;
-  string protocol;
+  Method method;
+  std::string url;
+  std::string protocol;
 };
 
 struct HttpRequest {
-  http_method::Method method;
-  string url;
-  string protocol;
-  map<string, string> headers;
-  string body;
-  string ToString();
+  Method method;
+  std::string url;
+  std::string protocol;
+  std::map<std::string, std::string> headers;
+  std::string body;
+  std::string ToString();
 };
+
+}  // namespace http
 
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_REQUEST_H_

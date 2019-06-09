@@ -10,11 +10,13 @@
 #include "http_server.h"
 #include "request_processor.h"
 
+namespace http {
+
 HttpServer::HttpServer() {}
 
 HttpServer::~HttpServer() {}
 
-void HttpServer::Handle(string path, HandlerFn handler) {
+void HttpServer::Handle(std::string path, HandlerFn handler) {
   handlers[path] = handler;
 }
 
@@ -80,9 +82,11 @@ void HttpServer::ConnectionHandler(int socket) {
       continue;
     }
 
-    string path = req->url;
+    std::string path = req->url;
     if (handlers.count(path) == 0) {
       std::cout << "No registered handlers for path: " << path << std::endl;
     }
   }
 }
+
+}  // namespace http

@@ -3,11 +3,13 @@
 #include "http_method.h"
 #include "http_request.h"
 
-string HttpRequest::ToString() {
-  string output = http_method::HttpMethodToString(method) + " " + url + " " +
-                  protocol + "\r\n";
+namespace http {
 
-  for (std::pair<string, string> i : headers) {
+std::string HttpRequest::ToString() {
+  std::string output =
+      HttpMethodToString(method) + " " + url + " " + protocol + "\r\n";
+
+  for (std::pair<std::string, std::string> i : headers) {
     output += i.first + ": " + i.second + "\r\n";
   }
   output += "\r\n";
@@ -16,3 +18,5 @@ string HttpRequest::ToString() {
 
   return output;
 }
+
+}  // namespace http

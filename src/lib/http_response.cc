@@ -2,13 +2,13 @@
 
 #include "http_response.h"
 
-using std::string;
+namespace http {
 
-string HttpResponse::ToString() {
-  string output =
+std::string HttpResponse::ToString() {
+  std::string output =
       protocol + " " + std::to_string(status_code) + " " + status_text + "\r\n";
 
-  for (std::pair<string, string> i : headers) {
+  for (std::pair<std::string, std::string> i : headers) {
     output += i.first + ": " + i.second + "\r\n";
   }
   output += "\r\n";
@@ -17,3 +17,5 @@ string HttpResponse::ToString() {
 
   return output;
 }
+
+}  // namespace http

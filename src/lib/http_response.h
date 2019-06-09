@@ -5,23 +5,23 @@
 #include <string>
 #include "http_method.h"
 
-using std::map;
-using std::string;
-using std::vector;
+namespace http {
 
 struct ResponseStatusLine {
-  string protocol;
+  std::string protocol;
   int status_code;
-  string status_text;
+  std::string status_text;
 };
 
 struct HttpResponse {
-  string protocol;
+  std::string protocol;
   int status_code;
-  string status_text;
-  map<string, string> headers;
-  string body;
-  string ToString();
+  std::string status_text;
+  std::map<std::string, std::string> headers;
+  std::string body;
+  std::string ToString();
 };
+
+}  // namespace http
 
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_RESPONSE_H_

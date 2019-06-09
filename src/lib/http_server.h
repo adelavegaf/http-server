@@ -5,6 +5,8 @@
 
 #include "http_request.h"
 
+namespace http {
+
 typedef void (*HandlerFn)(HttpRequest req);
 
 // Set up a server without using any libraries
@@ -14,10 +16,13 @@ class HttpServer {
   HttpServer();
   ~HttpServer();
   void Listen(int port);
-  void Handle(string path, HandlerFn handler);
+  void Handle(std::string path, HandlerFn handler);
 
  private:
-  std::map<string, HandlerFn> handlers;
+  std::map<std::string, HandlerFn> handlers;
   void ConnectionHandler(int socket);
 };
+
+}  // namespace http
+
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_SERVER_H_

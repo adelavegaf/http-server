@@ -6,20 +6,22 @@
 
 #include "http_request.h"
 
-using std::optional;
-using std::string;
+namespace http {
 
 class RequestProcessor {
  public:
   RequestProcessor();
-  optional<HttpRequest> Process(const char buffer[], int size);
+  std::optional<HttpRequest> Process(const char buffer[], int size);
 
  private:
-  string cur_request;
-  unsigned long GetContentLength(const string header);
-  HttpRequest ParseRequest(const string header, const string body);
-  RequestStatusLine ParseStatusLine(const string s);
-  map<string, string> ParseHeaders(const vector<string> lines);
+  std::string cur_request;
+  unsigned long GetContentLength(const std::string header);
+  HttpRequest ParseRequest(const std::string header, const std::string body);
+  RequestStatusLine ParseStatusLine(const std::string s);
+  std::map<std::string, std::string> ParseHeaders(
+      const std::vector<std::string> lines);
 };
+
+}  // namespace http
 
 #endif  // HTTP_SERVER_SRC_LIB_HTTP_REQUEST_PROCESSOR_H_

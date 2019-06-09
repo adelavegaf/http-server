@@ -2,7 +2,7 @@
 
 #include "http_method.h"
 
-namespace http_method {
+namespace http {
 
 Method StringToHttpMethod(std::string m) {
   std::transform(m.begin(), m.end(), m.begin(),
@@ -49,4 +49,5 @@ std::string HttpMethodToString(Method m) {
     return "";
   }
 }
-}  // namespace http_method
+
+}  // namespace http
