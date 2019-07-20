@@ -7,7 +7,6 @@ cc_library(
     ":request_processor",
     ":request",
     ":response",
-    ":response_builder",
   ]
 )
 
@@ -35,14 +34,6 @@ cc_library(
   srcs = ["response.cc"],
   hdrs = ["response.h"],
   visibility = ["//visibility:public"],
-)
-
-cc_library(
-  name = "response_builder",
-  srcs = ["response_builder.cc"],
-  hdrs = ["response_builder.h"],
-  visibility = ["//visibility:public"],
-  deps = [":response"],
 )
 
 cc_library(

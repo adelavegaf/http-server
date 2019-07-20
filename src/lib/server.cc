@@ -9,7 +9,6 @@
 #include "request.h"
 #include "request_processor.h"
 #include "response.h"
-#include "response_builder.h"
 #include "server.h"
 
 namespace http {
@@ -110,7 +109,7 @@ void Server::ConnectionHandler(int socket) {
 }
 
 Response Server::GetDefaultErrorResponse() {
-  return ResponseBuilder{}
+  return Response::Builder{}
       .SetStatus(404, "Not found")
       .SetConnection("Closed")
       .SetBody("Not found", "text/html")

@@ -5,6 +5,5 @@ cc_binary(
     "//src/lib:server",
     "//src/lib:request",
     "//src/lib:response",
-    "//src/lib:response_builder",
   ]
 )
